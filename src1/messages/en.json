@@ -1,0 +1,24 @@
+{
+  "HomePage": {
+    "title": "Welcome to Maharashtra Education & Tech Classes",
+    "description": "Education, Computer Training and IT Solutions",
+    "contactUs": "Contact Us"
+  },
+  "Hero": {
+    "badge": "Education Meets Technology",
+    "title": "Learn Today.",
+    "highlight": "Build Tomorrow.",
+    "description": "Empowering students and professionals with quality education, practical computer training and innovative IT solutions.",
+    "exploreCourses": "Explore Courses",
+    "contactUs": "Get in Touch",
+    "students": "Students",
+    "courses": "Courses",
+    "training": "Practical Training",
+    "education": "Education",
+    "educationTitle": "School & Academic Learning",
+    "technology": "Technology",
+    "technologyTitle": "Computer & Programming",
+    "innovation": "Innovation",
+    "innovationTitle": "IT Services & Solutions"
+  }
+}
