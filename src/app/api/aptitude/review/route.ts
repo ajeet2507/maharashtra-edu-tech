@@ -1,9 +1,11 @@
 
-import { NextResponse } from 'next/server';
+import { connection, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { getAptitudeStudent } from '@/lib/aptitudeSession';
 
 export async function GET() {
+  await connection();
+
   try {
     // 1. Verify secure student session
     const student = await getAptitudeStudent();
