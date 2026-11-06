@@ -7,6 +7,8 @@ import ITServicesSection from '@/components/home/ITServicesSection';
 import ContactSection from '@/components/home/ContactSection';
 import SchoolCoachingSection from '@/components/home/SchoolCoachingSection';
 import AdmissionSection from '@/components/home/AdmissionSection';
+import RevealOnScroll from '@/components/common/RevealOnScroll';
+import AptitudeScrollPopup from '@/components/home/AptitudeScrollPopup';
 
 import { setRequestLocale } from 'next-intl/server';
 
@@ -22,15 +24,16 @@ export default async function HomePage({ params }: Props) {
   return (
     <>
       <main>
-        <HeroSection />
-        <SchoolCoachingSection />
-        <CoursesSection />
-        <AboutSection />
-        <WhyChooseUs />
-        <ITServicesSection />
-        <AdmissionSection />
-        <ContactSection />
+        <div className="hero-entrance"><HeroSection /></div>
+        <RevealOnScroll><SchoolCoachingSection /></RevealOnScroll>
+        <RevealOnScroll><CoursesSection /></RevealOnScroll>
+        <RevealOnScroll><AboutSection /></RevealOnScroll>
+        <RevealOnScroll><WhyChooseUs /></RevealOnScroll>
+        <RevealOnScroll><ITServicesSection /></RevealOnScroll>
+        <RevealOnScroll><AdmissionSection /></RevealOnScroll>
+        <RevealOnScroll><ContactSection /></RevealOnScroll>
       </main>
+      <AptitudeScrollPopup />
     </>
   );
 }

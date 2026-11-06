@@ -6,6 +6,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import MobileActionBar from '@/components/layout/MobileActionBar';
 
 import { routing } from '@/i18n/routing';
 import '../globals.css';
@@ -55,8 +56,9 @@ export default async function LocaleLayout({
       >
         <NextIntlClientProvider>
           <Header />
-          {children}
+          <div className="pb-20 md:pb-0">{children}</div>
           <Footer />
+          <MobileActionBar />
         </NextIntlClientProvider>
       </body>
     </html>

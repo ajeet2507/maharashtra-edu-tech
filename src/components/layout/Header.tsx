@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Link } from '@/i18n/navigation';
-import { Menu, Phone, X } from 'lucide-react';
+import { Link, usePathname } from '@/i18n/navigation';
+import { Menu, Phone, Target, X } from 'lucide-react';
 import LanguageSwitcher from './LanguageSwitcher';
 
 const navLinks = [
@@ -18,6 +18,8 @@ const navLinks = [
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const t = useTranslations('Navigation');
+  const pathname = usePathname();
+  const isAptitudePage = pathname === '/aptitude';
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/95 backdrop-blur">
@@ -50,12 +52,13 @@ export default function Header() {
               {t(key)}
             </Link>
           ))}
-          <Link
+          {!isAptitudePage && <Link
             href="/aptitude"
-            className="whitespace-nowrap text-xs font-bold text-slate-700 transition hover:text-[#a35f00] 2xl:text-sm"
+            className="inline-flex min-h-11 items-center gap-2 whitespace-nowrap rounded-lg bg-[#ffc928] px-3 py-2 text-xs font-extrabold text-[#10234d] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#ffda5e] active:scale-95 2xl:px-4 2xl:text-sm"
           >
-            {t('aptitude')}
-          </Link>
+            <Target aria-hidden="true" size={17} />
+            {t('aptitudeCta')}
+          </Link>}
         </nav>
 
         <div className="flex shrink-0 items-center gap-2">
@@ -78,6 +81,16 @@ export default function Header() {
         </div>
       </div>
 
+      {!isAptitudePage && <div className="border-t border-[#f1e8c9] bg-[#fff9e6] px-4 py-2.5 xl:hidden sm:px-6">
+        <Link
+          href="/aptitude"
+          className="mx-auto flex min-h-12 max-w-7xl items-center justify-center gap-2 rounded-xl bg-[#ffc928] px-4 py-3 text-center text-sm font-extrabold text-[#10234d] shadow-sm transition hover:bg-[#ffda5e] active:scale-[0.99]"
+        >
+          <Target aria-hidden="true" size={18} />
+          {t('aptitudeCta')}
+        </Link>
+      </div>}
+
       {menuOpen && (
         <nav aria-label={t('mainMenu')} className="border-t border-slate-100 bg-white px-4 py-3 xl:hidden">
           <div className="mx-auto flex max-w-7xl flex-col gap-1">
@@ -91,13 +104,13 @@ export default function Header() {
                 {t(key)}
               </Link>
             ))}
-            <Link
+            {!isAptitudePage && <Link
               href="/aptitude"
               onClick={() => setMenuOpen(false)}
               className="rounded-lg px-3 py-3 text-sm font-semibold text-slate-700 hover:bg-[#fff8df] hover:text-[#10234d]"
             >
               {t('aptitude')}
-            </Link>
+            </Link>}
             <Link
               href="/#admission"
               onClick={() => setMenuOpen(false)}

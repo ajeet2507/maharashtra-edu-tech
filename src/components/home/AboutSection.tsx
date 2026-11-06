@@ -19,21 +19,21 @@ export default async function AboutSection() {
       title: t('pillarOneTitle'),
       description: t('pillarOneDescription'),
       Icon: BookOpenCheck,
-      iconClass: 'bg-blue-50 text-blue-700',
+      iconClass: 'bg-[#fff4c2] text-[#10234d]',
     },
     {
       number: '02',
       title: t('pillarTwoTitle'),
       description: t('pillarTwoDescription'),
       Icon: Code2,
-      iconClass: 'bg-violet-50 text-violet-700',
+      iconClass: 'bg-[#e6edf9] text-[#183b7a]',
     },
     {
       number: '03',
       title: t('pillarThreeTitle'),
       description: t('pillarThreeDescription'),
       Icon: BrainCircuit,
-      iconClass: 'bg-amber-50 text-amber-700',
+      iconClass: 'bg-[#ffe5cf] text-[#8c3f00]',
     },
   ];
 
@@ -42,8 +42,8 @@ export default async function AboutSection() {
       id="about"
       className="relative overflow-hidden bg-[#fff9e6] py-16 sm:py-20 lg:py-24"
     >
-      <div className="pointer-events-none absolute -left-40 top-20 h-80 w-80 rounded-full bg-blue-50 blur-3xl" />
-      <div className="pointer-events-none absolute -right-40 bottom-0 h-96 w-96 rounded-full bg-indigo-50 blur-3xl" />
+      <div className="pointer-events-none absolute -left-40 top-20 h-80 w-80 rounded-full bg-[#fff0ae] blur-3xl" />
+      <div className="pointer-events-none absolute -right-40 bottom-0 h-96 w-96 rounded-full bg-[#e6edf9] blur-3xl" />
 
       <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
 
@@ -126,7 +126,7 @@ export default async function AboutSection() {
 
           <div className="mb-7 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
             <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-blue-700">
+              <p className="text-xs font-bold uppercase tracking-widest text-[#a35f00]">
                 {t('pillarsEyebrow')}
               </p>
 
@@ -165,7 +165,7 @@ export default async function AboutSection() {
                   {description}
                 </p>
 
-                <div className="mt-5 h-1 w-10 rounded-full bg-blue-600 transition-all duration-300 group-hover:w-16" />
+                <div                 className="mt-5 h-1 w-10 rounded-full bg-[#ffc928] transition-all duration-300 group-hover:w-16" />
               </article>
             ))}
 

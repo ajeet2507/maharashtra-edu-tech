@@ -1,4 +1,5 @@
 import { getTranslations } from 'next-intl/server';
+import Image from 'next/image';
 import {
   BookOpen,
   Calculator,
@@ -58,6 +59,20 @@ export default async function SchoolCoachingSection() {
               </article>
             ))}
           </div>
+        </div>
+
+        <div className="school-image-panel relative mt-10 h-48 overflow-hidden rounded-2xl sm:h-64 lg:h-72">
+          <Image
+            src="/courses/school-coaching.webp"
+            alt={t('imageAlt')}
+            fill
+            sizes="(max-width: 1023px) 100vw, 1216px"
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#10234d]/85 via-[#10234d]/35 to-transparent" />
+          <p className="absolute bottom-5 left-5 max-w-lg text-lg font-extrabold leading-snug text-white sm:bottom-8 sm:left-8 sm:text-2xl">
+            {t('imageCaption')}
+          </p>
         </div>
 
         <div className="mt-10 grid grid-cols-1 gap-3 rounded-2xl bg-[#10234d] p-5 sm:grid-cols-2 sm:p-6 lg:grid-cols-3">

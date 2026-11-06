@@ -81,7 +81,7 @@ export default async function ContactSection() {
                       <p className="text-sm font-semibold text-white">
                         {item.title}
                       </p>
-                      <p className="mt-1 text-sm leading-6 text-slate-300">
+                      <p className="mt-1 break-all text-sm leading-6 text-slate-300">
                         {item.value}
                       </p>
                     </div>

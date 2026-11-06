@@ -1,52 +1,32 @@
 import { getTranslations } from 'next-intl/server';
-import {
-  ArrowUpRight,
-  Code2,
-  Laptop,
-  Layers3,
-  Smartphone,
-  Monitor,
-} from 'lucide-react';
+import CoursesCarousel, { type CourseSlide } from './CoursesCarousel';
 
-const courses = [
-  {
-    icon: Monitor,
-    titleKey: 'categoryOneTitle',
-    descriptionKey: 'categoryOneDescription',
-    listKey: 'categoryOneList',
-  },
-  {
-    icon: Code2,
-    titleKey: 'categoryTwoTitle',
-    descriptionKey: 'categoryTwoDescription',
-    listKey: 'categoryTwoList',
-  },
-  {
-    icon: Laptop,
-    titleKey: 'categoryThreeTitle',
-    descriptionKey: 'categoryThreeDescription',
-    listKey: 'categoryThreeList',
-  },
-  {
-    icon: Layers3,
-    titleKey: 'categoryFourTitle',
-    descriptionKey: 'categoryFourDescription',
-    listKey: 'categoryFourList',
-  },
-  {
-    icon: Smartphone,
-    titleKey: 'categoryFiveTitle',
-    descriptionKey: 'categoryFiveDescription',
-    listKey: 'categoryFiveList',
-  },
-];
+const courseImages = [
+  { id: 'computer-basics', image: '/courses/computer-basics.webp', titleKey: 'categoryOneTitle', descriptionKey: 'categoryOneDescription', listKey: 'categoryOneList', altKey: 'categoryOneImageAlt' },
+  { id: 'programming', image: '/courses/programming.webp', titleKey: 'categoryTwoTitle', descriptionKey: 'categoryTwoDescription', listKey: 'categoryTwoList', altKey: 'categoryTwoImageAlt' },
+  { id: 'web-development', image: '/courses/web-development.webp', titleKey: 'categoryThreeTitle', descriptionKey: 'categoryThreeDescription', listKey: 'categoryThreeList', altKey: 'categoryThreeImageAlt' },
+  { id: 'frameworks', image: '/courses/frameworks.webp', titleKey: 'categoryFourTitle', descriptionKey: 'categoryFourDescription', listKey: 'categoryFourList', altKey: 'categoryFourImageAlt' },
+  { id: 'mobile-apps', image: '/courses/mobile-apps.webp', titleKey: 'categoryFiveTitle', descriptionKey: 'categoryFiveDescription', listKey: 'categoryFiveList', altKey: 'categoryFiveImageAlt' },
+] as const;
 
 export default async function CoursesSection() {
   const t = await getTranslations('Courses');
 
+  const courses: CourseSlide[] = courseImages.map(
+    ({ id, image, titleKey, descriptionKey, listKey, altKey }) => ({
+      id,
+      image,
+      title: t(titleKey),
+      description: t(descriptionKey),
+      topics: t(listKey).split('|'),
+      imageAlt: t(altKey),
+    }),
+  );
+
   return (
-    <section id="courses" className="bg-[#fff9e6] py-16 sm:py-20 lg:py-24">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section id="courses" className="relative overflow-hidden bg-[#fff9e6] py-16 sm:py-20 lg:py-24">
+      <div aria-hidden="true" className="section-shape pointer-events-none absolute -right-20 top-24 h-52 w-52 rounded-full border-[28px] border-[#10234d]/[0.04]" />
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
           <p className="inline-flex rounded-full bg-[#ffedaa] px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-[#10234d]">
             {t('eyebrow')}
@@ -57,42 +37,7 @@ export default async function CoursesSection() {
           <p className="mt-4 text-base leading-7 text-slate-600">{t('description')}</p>
         </div>
 
-        <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {courses.map(({ icon: Icon, titleKey, descriptionKey, listKey }, index) => (
-            <article
-              key={titleKey}
-              className="group flex flex-col rounded-2xl border border-[#e8dfc7] bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#edc247] hover:shadow-xl sm:p-6"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#10234d] text-[#ffc928]">
-                  <Icon aria-hidden="true" size={24} />
-                </div>
-                <span className="rounded-full bg-[#fff4c2] px-3 py-1 text-xs font-extrabold text-[#10234d]">
-                  {t('categoryLabel')} 0{index + 1}
-                </span>
-              </div>
-              <h3 className="mt-5 text-xl font-extrabold text-[#10234d]">{t(titleKey)}</h3>
-              <p className="mt-2 text-sm leading-6 text-slate-600">{t(descriptionKey)}</p>
-              <ul className="mt-5 flex flex-wrap gap-2">
-                {t(listKey).split('|').map((item) => (
-                  <li
-                    key={item}
-                    className="rounded-lg bg-[#f4f6fa] px-2.5 py-1.5 text-xs font-medium leading-4 text-slate-700"
-                  >
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <a
-                href="#admission"
-                className="mt-6 inline-flex min-h-11 items-center gap-2 self-start rounded-lg bg-[#ffc928] px-4 py-2 text-sm font-bold text-[#10234d] transition hover:bg-[#ffda5e]"
-              >
-                {t('courseDetails')}
-                <ArrowUpRight aria-hidden="true" size={16} />
-              </a>
-            </article>
-          ))}
-        </div>
+        <CoursesCarousel courses={courses} />
       </div>
     </section>
   );

@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 import { ArrowUpRight, GraduationCap, Phone } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
 import LanguageSwitcher from './LanguageSwitcher';
+import FooterAptitudeLink from './FooterAptitudeLink';
 
 async function Copyright() {
   const t = await getTranslations('Footer');
@@ -27,7 +28,7 @@ export default async function Footer() {
 
   return (
     <footer className="bg-[#0a1937] text-white">
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-14 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-12 pb-[calc(4.5rem+env(safe-area-inset-bottom))] sm:px-6 sm:py-14 md:pb-14 lg:px-8">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>
             <Link href="/" className="inline-flex items-center gap-3">
@@ -90,9 +91,7 @@ export default async function Footer() {
           <Suspense fallback={<p className="text-xs text-white/60">&nbsp;</p>}>
             <Copyright />
           </Suspense>
-          <Link href="/aptitude" className="text-xs font-semibold text-white/60 hover:text-[#ffc928]">
-            {navigation('aptitude')}
-          </Link>
+          <FooterAptitudeLink />
         </div>
       </div>
     </footer>

@@ -29,7 +29,7 @@ export default async function HeroSection() {
       <div aria-hidden="true" className="pointer-events-none absolute -bottom-48 -left-40 h-[28rem] w-[28rem] rounded-full border-[64px] border-[#ffc928]/10" />
 
       <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:px-8 lg:py-24">
-        <div>
+        <div className="hero-copy">
           <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-bold tracking-wide text-[#ffe27a] sm:text-sm">
             <GraduationCap aria-hidden="true" size={17} className="shrink-0" />
             <span>{t('badge')}</span>

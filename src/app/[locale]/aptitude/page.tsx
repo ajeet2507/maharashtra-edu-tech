@@ -2,7 +2,7 @@
 'use client';
 
 import { FormEvent, useEffect, useState } from 'react';
-import { Link } from '@/i18n/navigation';
+import AptitudeResultDashboard from '@/components/aptitude/AptitudeResultDashboard';
 
 type AptitudeQuestion = {
   question_order: number;
@@ -92,16 +92,42 @@ function isAptitudeResult(result: unknown): result is AptitudeResult {
   const candidate = result as Record<string, unknown>;
   const sectionScores = candidate.sectionScores;
 
+  if (
+    typeof candidate.percentage !== 'number' ||
+    !Number.isFinite(candidate.percentage) ||
+    candidate.percentage < 0 ||
+    candidate.percentage > 100 ||
+    typeof candidate.totalScore !== 'number' ||
+    !Number.isFinite(candidate.totalScore) ||
+    typeof candidate.totalQuestions !== 'number' ||
+    !Number.isFinite(candidate.totalQuestions) ||
+    candidate.totalQuestions <= 0 ||
+    candidate.totalScore < 0 ||
+    candidate.totalScore > candidate.totalQuestions ||
+    typeof sectionScores !== 'object' ||
+    sectionScores === null
+  ) {
+    return false;
+  }
+
+  const maximumScore = candidate.totalQuestions;
+  const scores = sectionScores as Record<string, unknown>;
+  const categoryScores = ['numerical', 'logical', 'verbal', 'computer'].map(
+    (category) => scores[category],
+  );
+
   return (
-    typeof candidate.percentage === 'number' &&
-    typeof candidate.totalScore === 'number' &&
-    typeof candidate.totalQuestions === 'number' &&
-    typeof sectionScores === 'object' &&
-    sectionScores !== null &&
-    typeof (sectionScores as Record<string, unknown>).numerical === 'number' &&
-    typeof (sectionScores as Record<string, unknown>).logical === 'number' &&
-    typeof (sectionScores as Record<string, unknown>).verbal === 'number' &&
-    typeof (sectionScores as Record<string, unknown>).computer === 'number'
+    categoryScores.every(
+      (score) =>
+        typeof score === 'number' &&
+        Number.isFinite(score) &&
+        score >= 0 &&
+        score <= maximumScore,
+    ) &&
+    categoryScores.reduce<number>(
+      (total, score) => total + (typeof score === 'number' ? score : 0),
+      0,
+    ) === candidate.totalScore
   );
 }
 
@@ -453,63 +479,20 @@ export default function AptitudePage() {
     ? reviewQuestions.filter((item) => item.selectedOption !== null).length
     : Object.values(answers).filter(Boolean).length;
 
-  const correctCount = reviewQuestions.length
-    ? reviewQuestions.filter((item) => item.isCorrect).length
-    : (testResult?.totalScore ?? 0);
-
-  const wrongCount = reviewQuestions.length
-    ? reviewQuestions.filter(
-        (item) => item.selectedOption !== null && !item.isCorrect
-      ).length
-    : Math.max(0, answeredCount - correctCount);
-
-  const unansweredCount = reviewQuestions.length
-    ? reviewQuestions.filter((item) => item.selectedOption === null).length
-    : Math.max(
-        0,
-        (testResult?.totalQuestions ?? 20) - answeredCount
-      );
-
-  const sectionData = testResult
-    ? [
-        {
-          label: 'Numerical Ability',
-          score: testResult.sectionScores.numerical,
-          color: 'bg-blue-500',
-          textColor: 'text-blue-700',
-        },
-        {
-          label: 'Logical Reasoning',
-          score: testResult.sectionScores.logical,
-          color: 'bg-violet-500',
-          textColor: 'text-violet-700',
-        },
-        {
-          label: 'Verbal Ability',
-          score: testResult.sectionScores.verbal,
-          color: 'bg-amber-500',
-          textColor: 'text-amber-700',
-        },
-        {
-          label: 'Computer Knowledge',
-          score: testResult.sectionScores.computer,
-          color: 'bg-emerald-500',
-          textColor: 'text-emerald-700',
-        },
-      ]
-    : [];
-
   return (
     <main className="min-h-screen bg-gray-50 px-4 py-12">
-      <div className="mx-auto max-w-3xl rounded-2xl bg-white p-6 shadow-sm sm:p-10">
+      <div className={`mx-auto rounded-2xl bg-white p-5 shadow-sm sm:p-8 ${testResult ? 'max-w-7xl' : 'max-w-3xl sm:p-10'}`}>
 
-        <h1 className="text-3xl font-bold text-gray-900">
-          Free Aptitude Test
-        </h1>
-
-        <p className="mt-2 text-gray-600">
-          Complete the registration form to begin your aptitude test.
-        </p>
+        {!testResult && (
+          <>
+            <h1 className="text-3xl font-bold text-gray-900">
+              Free Aptitude Test
+            </h1>
+            <p className="mt-2 text-gray-600">
+              Complete the registration form to begin your aptitude test.
+            </p>
+          </>
+        )}
 
         {restoring ? (
           <div className="mt-10 rounded-xl border border-blue-100 bg-blue-50 p-6 text-center">
@@ -523,392 +506,14 @@ export default function AptitudePage() {
 
         ) : testResult ? (
 
-          /* RESULT PAGE */
-          <section className="mt-8 space-y-6">
-
-            {/* RESULT HEADER */}
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-950 via-blue-950 to-indigo-900 p-7 text-white shadow-xl sm:p-10">
-              <div className="relative z-10">
-                <p className="text-sm font-medium uppercase tracking-widest text-blue-200">
-                  Aptitude Assessment Report
-                </p>
-
-                <h2 className="mt-3 text-3xl font-bold sm:text-4xl">
-                  Your Test Result
-                </h2>
-
-                <p className="mt-2 text-sm text-blue-100">
-                  Your performance analysis and career improvement guide.
-                </p>
-
-                <div className="mt-8 flex flex-col items-center gap-6 sm:flex-row">
-                  <div className="flex h-36 w-36 shrink-0 flex-col items-center justify-center rounded-full border-4 border-blue-300 bg-white/10">
-                    <span className="text-4xl font-bold">
-                      {testResult.percentage}%
-                    </span>
-                    <span className="mt-1 text-xs text-blue-100">
-                      Overall Score
-                    </span>
-                  </div>
-
-                  <div>
-                    <p className="text-2xl font-bold">
-                      {testResult.totalScore} / {testResult.totalQuestions}
-                    </p>
-
-                    <p className="mt-1 text-sm text-blue-100">
-                      Total correct answers
-                    </p>
-
-                    <p className="mt-4 text-sm text-blue-100">
-                      {testResult.percentage < 40
-                        ? 'Your learning journey starts here. Focus on building strong fundamentals.'
-                        : testResult.percentage < 70
-                          ? 'Good effort! Regular practice can improve your performance.'
-                          : 'Great performance! Keep developing your skills.'}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-blue-400/10" />
-              <div className="absolute -bottom-24 -left-16 h-64 w-64 rounded-full bg-indigo-400/10" />
-            </div>
-
-            {/* PERFORMANCE SUMMARY */}
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-
-              <div className="rounded-2xl border border-green-100 bg-green-50 p-4">
-                <p className="text-sm text-green-700">Correct</p>
-                <p className="mt-2 text-3xl font-bold text-green-800">
-                  {correctCount}
-                </p>
-                <p className="text-xs text-green-700">Answers</p>
-              </div>
-
-              <div className="rounded-2xl border border-red-100 bg-red-50 p-4">
-                <p className="text-sm text-red-700">Wrong</p>
-                <p className="mt-2 text-3xl font-bold text-red-800">
-                  {wrongCount}
-                </p>
-                <p className="text-xs text-red-700">Answers</p>
-              </div>
-
-              <div className="rounded-2xl border border-amber-100 bg-amber-50 p-4">
-                <p className="text-sm text-amber-700">Unanswered</p>
-                <p className="mt-2 text-3xl font-bold text-amber-800">
-                  {unansweredCount}
-                </p>
-                <p className="text-xs text-amber-700">Questions</p>
-              </div>
-
-              <div className="rounded-2xl border border-blue-100 bg-blue-50 p-4">
-                <p className="text-sm text-blue-700">Total</p>
-                <p className="mt-2 text-3xl font-bold text-blue-800">
-                  {testResult.totalQuestions}
-                </p>
-                <p className="text-xs text-blue-700">Questions</p>
-              </div>
-
-            </div>
-
-            {/* REVIEW MY ANSWERS BUTTON */}
-            <div className="rounded-2xl border border-blue-100 bg-blue-50 p-6 text-center">
-              <h3 className="text-xl font-bold text-gray-900">
-                Check Your Answers
-              </h3>
-
-              <p className="mt-2 text-sm text-gray-600">
-                Review all your answers, correct answers and explanations.
-              </p>
-
-              <button
-                type="button"
-                onClick={handleReviewAnswers}
-                disabled={reviewLoading}
-                className="mt-5 rounded-lg bg-blue-700 px-7 py-3 font-semibold text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {reviewLoading ? 'Loading Answers...' : 'Review My Answers'}
-              </button>
-            </div>
-
-            {/* ANSWER REVIEW */}
-            {showReview && (
-              <div className="space-y-6" id="answer-review">
-
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div>
-                    <h2 className="text-2xl font-bold text-gray-900">
-                      Your Answer Review
-                    </h2>
-                    <p className="mt-1 text-sm text-gray-500">
-                      Review your selected answers and learn from explanations.
-                    </p>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => setShowReview(false)}
-                    className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
-                  >
-                    Hide Review
-                  </button>
-                </div>
-
-                {reviewQuestions.map((item) => (
-                  <div
-                    key={item.questionId}
-                    className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm"
-                  >
-                    <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-                      <span className="text-sm font-semibold text-gray-500">
-                        Question {item.questionOrder} · {item.section}
-                      </span>
-
-                      {item.selectedOption === null ? (
-                        <span className="rounded-full bg-yellow-100 px-3 py-1 text-sm font-semibold text-yellow-800">
-                          Not Answered
-                        </span>
-                      ) : item.isCorrect ? (
-                        <span className="rounded-full bg-green-100 px-3 py-1 text-sm font-semibold text-green-800">
-                          Correct
-                        </span>
-                      ) : (
-                        <span className="rounded-full bg-red-100 px-3 py-1 text-sm font-semibold text-red-800">
-                          Incorrect
-                        </span>
-                      )}
-                    </div>
-
-                    <h3 className="mb-4 font-semibold text-gray-900">
-                      {item.questionText}
-                    </h3>
-
-                    <div className="space-y-2">
-                      {(['A', 'B', 'C', 'D'] as const).map((option) => {
-                        const isCorrectOption =
-                          option === item.correctOption;
-
-                        const isSelectedOption =
-                          option === item.selectedOption;
-
-                        return (
-                          <div
-                            key={option}
-                            className={`rounded-lg border p-3 text-sm ${
-                              isCorrectOption
-                                ? 'border-green-500 bg-green-50 text-green-800'
-                                : isSelectedOption
-                                  ? 'border-red-500 bg-red-50 text-red-800'
-                                  : 'border-gray-200 bg-gray-50 text-gray-700'
-                            }`}
-                          >
-                            <span className="font-bold">{option}.</span>{' '}
-                            {item.options[option]}
-
-                            {isCorrectOption && (
-                              <span className="ml-2 font-semibold">
-                                (Correct Answer)
-                              </span>
-                            )}
-
-                            {isSelectedOption && !item.isCorrect && (
-                              <span className="ml-2 font-semibold">
-                                (Your Answer)
-                              </span>
-                            )}
-
-                            {isSelectedOption && item.isCorrect && (
-                              <span className="ml-2 font-semibold">
-                                (Your Answer)
-                              </span>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-
-                    {item.selectedOption === null && (
-                      <p className="mt-3 text-sm text-yellow-800">
-                        You did not select an answer for this question.
-                      </p>
-                    )}
-
-                    {item.explanation && (
-                      <div className="mt-4 rounded-lg bg-blue-50 p-4">
-                        <p className="mb-1 font-semibold text-blue-900">
-                          Explanation
-                        </p>
-                        <p className="text-sm leading-6 text-blue-800">
-                          {item.explanation}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                ))}
-
-              </div>
-            )}
-
-            {/* SUBJECT WISE GRAPH */}
-            <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-7">
-              <h3 className="text-xl font-bold text-gray-900">
-                Subject-wise Performance
-              </h3>
-
-              <p className="mt-1 text-sm text-gray-500">
-                Your marks in each subject out of 5 questions.
-              </p>
-
-              <div className="mt-7 space-y-7">
-                {sectionData.map((section) => (
-                  <div key={section.label}>
-                    <div className="mb-2 flex items-center justify-between gap-3">
-                      <span className="text-sm font-semibold text-gray-800">
-                        {section.label}
-                      </span>
-
-                      <span className={`text-sm font-bold ${section.textColor}`}>
-                        {section.score} / 5
-                      </span>
-                    </div>
-
-                    <div
-                      className="h-3 w-full overflow-hidden rounded-full bg-gray-100"
-                      role="progressbar"
-                      aria-label={`${section.label} score`}
-                      aria-valuenow={section.score}
-                      aria-valuemin={0}
-                      aria-valuemax={5}
-                    >
-                      <div
-                        className={`h-full rounded-full ${section.color} transition-all duration-700`}
-                        style={{
-                          width: `${(section.score / 5) * 100}%`,
-                        }}
-                      />
-                    </div>
-
-                    <p className="mt-2 text-xs text-gray-500">
-                      {section.score >= 4
-                        ? 'Strong performance. Keep practising.'
-                        : section.score === 3
-                          ? 'Good foundation. Improve with regular practice.'
-                          : 'Needs improvement. Focus on basic concepts and practice.'}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* CAREER IMPROVEMENT GUIDE */}
-            <div className="rounded-2xl border border-indigo-100 bg-indigo-50/60 p-5 sm:p-7">
-              <h3 className="text-xl font-bold text-gray-900">
-                Your Career Improvement Guide
-              </h3>
-
-              <p className="mt-2 text-sm text-gray-600">
-                Follow these steps to improve your aptitude and career readiness.
-              </p>
-
-              <div className="mt-6 space-y-5">
-
-                <div className="flex gap-4">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-600 font-bold text-white">
-                    1
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900">
-                      Strengthen your weak subjects
-                    </h4>
-                    <p className="mt-1 text-sm leading-6 text-gray-600">
-                      Start with{' '}
-                      {sectionData
-                        .filter((section) => section.score <= 2)
-                        .map((section) => section.label)
-                        .join(', ') || 'your weaker areas'}.
-                      {' '}Revise basic concepts and solve practice questions regularly.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-4">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-600 font-bold text-white">
-                    2
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900">
-                      Follow a daily learning routine
-                    </h4>
-                    <p className="mt-1 text-sm leading-6 text-gray-600">
-                      Spend 30–45 minutes daily on numerical ability,
-                      logical reasoning, English communication and computer fundamentals.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-4">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-600 font-bold text-white">
-                    3
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900">
-                      Build practical skills
-                    </h4>
-                    <p className="mt-1 text-sm leading-6 text-gray-600">
-                      Practise computer applications, communication and
-                      problem-solving through practical exercises and projects.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-4">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-600 font-bold text-white">
-                    4
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900">
-                      Get career guidance
-                    </h4>
-                    <p className="mt-1 text-sm leading-6 text-gray-600">
-                      Discuss your interests, current skills and learning goals
-                      with a career counsellor before choosing a course.
-                    </p>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
-            {/* NEXT ACTION */}
-            <div className="rounded-2xl border border-gray-200 bg-white p-6 text-center shadow-sm">
-              <h3 className="text-xl font-bold text-gray-900">
-                Take the Next Step in Your Career
-              </h3>
-
-              <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-gray-600">
-                Your aptitude result is a starting point for understanding
-                your current skills. Get proper guidance to plan your next
-                learning step.
-              </p>
-
-              <Link
-                href="/#contact"
-                className="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-blue-700 px-6 py-3 font-semibold text-white transition hover:bg-blue-800 sm:w-auto"
-              >
-                Contact Us for Career Guidance
-              </Link>
-
-              <p className="mt-4 text-xs text-gray-400">
-                This assessment is indicative and is not a final career selection test.
-              </p>
-            </div>
-
-            <p className="text-center text-sm text-gray-500">
-              Your result has been saved. You cannot retake this assessment.
-            </p>
-
-          </section>
+          <AptitudeResultDashboard
+            result={testResult}
+            review={reviewQuestions}
+            reviewLoading={reviewLoading}
+            showReview={showReview}
+            onReview={handleReviewAnswers}
+            onToggleReview={setShowReview}
+          />
 
         ) : questions.length > 0 ? (
 
