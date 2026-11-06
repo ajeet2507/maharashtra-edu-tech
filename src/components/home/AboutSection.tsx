@@ -40,7 +40,7 @@ export default async function AboutSection() {
   return (
     <section
       id="about"
-      className="relative overflow-hidden bg-white py-20 sm:py-24 lg:py-28"
+      className="relative overflow-hidden bg-[#fff9e6] py-16 sm:py-20 lg:py-24"
     >
       <div className="pointer-events-none absolute -left-40 top-20 h-80 w-80 rounded-full bg-blue-50 blur-3xl" />
       <div className="pointer-events-none absolute -right-40 bottom-0 h-96 w-96 rounded-full bg-indigo-50 blur-3xl" />
@@ -51,14 +51,14 @@ export default async function AboutSection() {
 
           {/* About Introduction */}
           <div>
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50/70 px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-blue-800">
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#f0d47a] bg-[#fff4c2] px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-[#10234d]">
               <Compass size={15} />
               {t('eyebrow')}
             </div>
 
             <h2 className="max-w-xl text-3xl font-black leading-tight tracking-tight text-slate-950 sm:text-4xl lg:text-5xl">
               {t('title')}{' '}
-              <span className="bg-gradient-to-r from-blue-700 to-indigo-600 bg-clip-text text-transparent">
+              <span className="text-[#a35f00]">
                 {t('highlight')}
               </span>
             </h2>
@@ -69,7 +69,7 @@ export default async function AboutSection() {
 
             <a
               href="#contact"
-              className="group mt-8 inline-flex min-h-12 items-center gap-3 rounded-xl bg-slate-950 px-6 py-3 text-sm font-bold text-white transition duration-300 hover:-translate-y-1 hover:bg-blue-800"
+              className="group mt-8 inline-flex min-h-12 items-center gap-3 rounded-xl bg-[#10234d] px-6 py-3 text-sm font-bold text-white transition duration-300 hover:-translate-y-1 hover:bg-[#183b7a]"
             >
               {t('cta')}
               <ArrowUpRight
@@ -83,11 +83,11 @@ export default async function AboutSection() {
           <div className="grid gap-4 sm:grid-cols-2">
 
             <article className="rounded-3xl border border-slate-100 bg-[#f8faff] p-6 sm:p-7">
-              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-100 text-blue-800">
+              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#fff0ae] text-[#10234d]">
                 <Target size={24} />
               </div>
 
-              <p className="text-xs font-bold uppercase tracking-widest text-blue-700">
+              <p className="text-xs font-bold uppercase tracking-widest text-[#a35f00]">
                 {t('missionLabel')}
               </p>
 
@@ -101,11 +101,11 @@ export default async function AboutSection() {
             </article>
 
             <article className="rounded-3xl border border-slate-100 bg-slate-950 p-6 text-white sm:mt-10 sm:p-7">
-              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-cyan-300">
+              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#ffc928] text-[#10234d]">
                 <Lightbulb size={24} />
               </div>
 
-              <p className="text-xs font-bold uppercase tracking-widest text-cyan-300">
+              <p className="text-xs font-bold uppercase tracking-widest text-[#ffe27a]">
                 {t('visionLabel')}
               </p>
 

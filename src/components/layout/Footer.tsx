@@ -1,192 +1,99 @@
-
 import { io } from 'next/cache';
 import { getTranslations } from 'next-intl/server';
 import { Suspense } from 'react';
-import {
-  GraduationCap,
-  ArrowUpRight,
-} from 'lucide-react';
+import { ArrowUpRight, GraduationCap, Phone } from 'lucide-react';
+import { Link } from '@/i18n/navigation';
+import LanguageSwitcher from './LanguageSwitcher';
 
 async function Copyright() {
   const t = await getTranslations('Footer');
   await io();
 
-  return (
-    <p className="text-sm text-slate-500">
-      {t('copyright', { year: new Date().getFullYear() })}
-    </p>
-  );
+  return <p className="text-xs text-white/60">{t('copyright', { year: new Date().getFullYear() })}</p>;
 }
 
 const quickLinks = [
-  { labelKey: 'home', href: '#home' },
-  { labelKey: 'about', href: '#about' },
-  { labelKey: 'courses', href: '#courses' },
-  { labelKey: 'services', href: '#services' },
-  { labelKey: 'contact', href: '#contact' },
-];
-
-const courseLinks = [
-  { labelKey: 'webDevelopment', href: '#courses' },
-  { labelKey: 'frontendDevelopment', href: '#courses' },
-  { labelKey: 'databaseManagement', href: '#courses' },
-  { labelKey: 'computerFundamentals', href: '#courses' },
-];
-
-const serviceLinks = [
-  { labelKey: 'websiteDevelopment', href: '#services' },
-  { labelKey: 'softwareDevelopment', href: '#services' },
-  { labelKey: 'mobileAppDevelopment', href: '#services' },
-  { labelKey: 'uiuxDesign', href: '#services' },
-];
+  { labelKey: 'home', href: '/#home' },
+  { labelKey: 'school', href: '/#school-coaching' },
+  { labelKey: 'about', href: '/#about' },
+  { labelKey: 'courses', href: '/#courses' },
+  { labelKey: 'services', href: '/#services' },
+  { labelKey: 'contact', href: '/#contact' },
+] as const;
 
 export default async function Footer() {
   const t = await getTranslations('Footer');
+  const navigation = await getTranslations('Navigation');
 
   return (
-    <footer className="bg-slate-950 text-white">
-      <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
-
-        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
-
-          {/* Institute Information */}
+    <footer className="bg-[#0a1937] text-white">
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-14 lg:px-8">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>
-            <a href="#home" className="inline-flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-600">
-                <GraduationCap size={25} />
-              </div>
+            <Link href="/" className="inline-flex items-center gap-3">
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#ffc928] text-[#10234d]">
+                <GraduationCap aria-hidden="true" size={25} />
+              </span>
+              <span>
+                <span className="block text-base font-black leading-tight">Maharashtra</span>
+                <span className="block text-xs font-semibold text-[#ffe27a]">Edu &amp; Tech Classes</span>
+              </span>
+            </Link>
+            <p className="mt-4 max-w-xs text-sm leading-6 text-white/70">{t('tagline')}</p>
+            <p className="mt-3 max-w-xs text-sm leading-6 text-white/60">{t('description')}</p>
+          </div>
 
-              <div>
-                <p className="text-lg font-bold leading-tight">
-                  Maharashtra
-                </p>
-                <p className="text-xs font-medium tracking-wide text-blue-400">
-                  Edu & Tech Classes
-                </p>
-              </div>
-            </a>
-
-            <p className="mt-6 max-w-xs text-sm leading-7 text-slate-400">
-              {t('description')}
-            </p>
-            <div className="mt-6 flex items-center gap-3">
-              {[
-                { label: 'Facebook', mark: 'f' },
-                { label: 'Instagram', mark: 'IG' },
-                { label: 'LinkedIn', mark: 'in' },
-                { label: 'YouTube', mark: 'YT' },
-              ].map(({ label, mark }) => (
-                <span
-                  key={label}
-                  title={label}
-                  aria-label={label}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-sm font-semibold text-slate-400"
-                >
-                  {mark}
-                </span>
+          <div>
+            <h2 className="text-sm font-extrabold text-[#ffe27a]">{t('quickLinksTitle')}</h2>
+            <ul className="mt-4 space-y-3">
+              {quickLinks.map(({ labelKey, href }) => (
+                <li key={labelKey}>
+                  <Link href={href} className="text-sm text-white/70 transition hover:text-[#ffc928]">
+                    {labelKey === 'school' ? navigation('school') : t(labelKey)}
+                  </Link>
+                </li>
               ))}
+            </ul>
+          </div>
+
+          <div>
+            <h2 className="text-sm font-extrabold text-[#ffe27a]">{t('coursesTitle')}</h2>
+            <ul className="mt-4 space-y-3">
+              {['computerFundamentals', 'programming', 'webDevelopment', 'mobileAppDevelopment'].map((key) => (
+                <li key={key}>
+                  <Link href="/#courses" className="text-sm text-white/70 transition hover:text-[#ffc928]">
+                    {t(key)}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h2 className="text-sm font-extrabold text-[#ffe27a]">{t('contactTitle')}</h2>
+            <a href="tel:+919773105112" className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-white/80 hover:text-[#ffc928]">
+              <Phone aria-hidden="true" size={16} />
+              +91 97731 05112
+            </a>
+            <Link href="/#contact" className="mt-3 flex items-center gap-2 text-sm text-white/70 hover:text-[#ffc928]">
+              {t('getInTouch')}
+              <ArrowUpRight aria-hidden="true" size={15} />
+            </Link>
+            <div className="mt-5">
+              <p className="mb-2 text-xs font-semibold text-white/60">{navigation('language')}</p>
+              <LanguageSwitcher />
             </div>
           </div>
-
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-base font-bold">
-              {t('quickLinksTitle')}
-            </h3>
-
-            <ul className="mt-6 space-y-4">
-              {quickLinks.map((link) => (
-                <li key={link.labelKey}>
-                  <a
-                    href={link.href}
-                    className="text-sm text-slate-400 transition-colors hover:text-blue-400"
-                  >
-                    {t(link.labelKey)}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Courses */}
-          <div>
-            <h3 className="text-base font-bold">
-              {t('coursesTitle')}
-            </h3>
-
-            <ul className="mt-6 space-y-4">
-              {courseLinks.map((link) => (
-                <li key={link.labelKey}>
-                  <a
-                    href={link.href}
-                    className="text-sm text-slate-400 transition-colors hover:text-blue-400"
-                  >
-                    {t(link.labelKey)}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Services */}
-          <div>
-            <h3 className="text-base font-bold">
-              {t('servicesTitle')}
-            </h3>
-
-            <ul className="mt-6 space-y-4">
-              {serviceLinks.map((link) => (
-                <li key={link.labelKey}>
-                  <a
-                    href={link.href}
-                    className="text-sm text-slate-400 transition-colors hover:text-blue-400"
-                  >
-                    {t(link.labelKey)}
-                  </a>
-                </li>
-              ))}
-            </ul>
-
-            <a
-              href="#contact"
-              className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-blue-400 hover:text-blue-300"
-            >
-              {t('getInTouch')}
-              <ArrowUpRight size={16} />
-            </a>
-          </div>
-
         </div>
 
-        {/* Bottom Bar */}
-        <div className="mt-14 flex flex-col gap-5 border-t border-white/10 pt-7 sm:flex-row sm:items-center sm:justify-between">
-          <Suspense
-            fallback={
-              <p className="text-sm text-slate-500" aria-hidden="true">
-                &nbsp;
-              </p>
-            }
-          >
+        <div className="mt-10 flex flex-col gap-3 border-t border-white/15 pt-5 sm:flex-row sm:items-center sm:justify-between">
+          <Suspense fallback={<p className="text-xs text-white/60">&nbsp;</p>}>
             <Copyright />
           </Suspense>
-
-          <div className="flex flex-wrap gap-6">
-            <a
-              href="#"
-              className="text-sm text-slate-500 hover:text-white"
-            >
-              {t('privacyPolicy')}
-            </a>
-
-            <a
-              href="#"
-              className="text-sm text-slate-500 hover:text-white"
-            >
-              {t('termsConditions')}
-            </a>
-          </div>
+          <Link href="/aptitude" className="text-xs font-semibold text-white/60 hover:text-[#ffc928]">
+            {navigation('aptitude')}
+          </Link>
         </div>
-
       </div>
     </footer>
   );

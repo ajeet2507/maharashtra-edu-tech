@@ -60,7 +60,7 @@ export default function ContactForm() {
       if (!response.ok) {
         setToast({
           type: response.status === 409 ? 'warning' : 'error',
-          message: result.message || 'Something went wrong.',
+          message: result.message || t('submitError'),
         });
         return;
       }
@@ -75,7 +75,7 @@ export default function ContactForm() {
     } catch {
       setToast({
         type: 'error',
-        message: 'Unable to connect. Please try again.',
+        message: t('connectionError'),
       });
     } finally {
       setIsSubmitting(false);
@@ -127,8 +127,8 @@ export default function ContactForm() {
         </div>
       )}
 
-      <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm lg:col-span-3">
-        <h3 className="text-2xl font-bold text-slate-900">
+      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8 lg:col-span-3">
+        <h3 className="text-2xl font-extrabold text-[#10234d]">
           {t('formTitle')}
         </h3>
 
@@ -137,7 +137,7 @@ export default function ContactForm() {
         </p>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-5">
-          <div className="grid gap-5 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <div>
               <label htmlFor="name" className="mb-2 block text-sm font-semibold text-slate-700">
                 {t('nameLabel')}
@@ -150,7 +150,7 @@ export default function ContactForm() {
                 minLength={2}
                 maxLength={100}
                 placeholder={t('namePlaceholder')}
-                className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+                className="min-h-12 w-full rounded-xl border border-slate-200 px-4 py-3 text-base outline-none transition focus:border-[#183b7a] focus:ring-2 focus:ring-[#183b7a]/15"
               />
             </div>
 
@@ -164,12 +164,12 @@ export default function ContactForm() {
                 type="email"
                 maxLength={255}
                 placeholder={t('emailPlaceholder')}
-                className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+                className="min-h-12 w-full rounded-xl border border-slate-200 px-4 py-3 text-base outline-none transition focus:border-[#183b7a] focus:ring-2 focus:ring-[#183b7a]/15"
               />
             </div>
           </div>
 
-          <div className="grid gap-5 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <div>
               <label htmlFor="phone" className="mb-2 block text-sm font-semibold text-slate-700">
                 {t('phoneLabel')}
@@ -180,9 +180,9 @@ export default function ContactForm() {
                 type="tel"
                 required
                 pattern="[6-9][0-9]{9}"
-                title="Enter a valid 10-digit mobile number"
+                title={t('phoneValidation')}
                 placeholder={t('phonePlaceholder')}
-                className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+                className="min-h-12 w-full rounded-xl border border-slate-200 px-4 py-3 text-base outline-none transition focus:border-[#183b7a] focus:ring-2 focus:ring-[#183b7a]/15"
               />
             </div>
 
@@ -198,7 +198,7 @@ export default function ContactForm() {
                 minLength={3}
                 maxLength={150}
                 placeholder={t('subjectPlaceholder')}
-                className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+                className="min-h-12 w-full rounded-xl border border-slate-200 px-4 py-3 text-base outline-none transition focus:border-[#183b7a] focus:ring-2 focus:ring-[#183b7a]/15"
               />
             </div>
           </div>
@@ -213,16 +213,16 @@ export default function ContactForm() {
               rows={5}
               maxLength={3000}
               placeholder={t('messagePlaceholder')}
-              className="w-full resize-none rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+              className="w-full resize-none rounded-xl border border-slate-200 px-4 py-3 text-base outline-none transition focus:border-[#183b7a] focus:ring-2 focus:ring-[#183b7a]/15"
             />
           </div>
 
           <button
             type="submit"
             disabled={isSubmitting}
-            className="inline-flex items-center gap-2 rounded-xl bg-blue-700 px-7 py-3.5 text-sm font-bold text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex min-h-12 items-center gap-2 rounded-xl bg-[#10234d] px-7 py-3.5 text-sm font-bold text-white transition hover:bg-[#183b7a] disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {isSubmitting ? 'Submitting...' : t('sendMessage')}
+            {isSubmitting ? t('sending') : t('sendMessage')}
             <Send size={17} />
           </button>
 

@@ -1,41 +1,43 @@
-
 import { getTranslations } from 'next-intl/server';
 import {
   ArrowUpRight,
   Code2,
-  Database,
-  Globe,
   Laptop,
+  Layers3,
+  Smartphone,
+  Monitor,
 } from 'lucide-react';
 
 const courses = [
   {
+    icon: Monitor,
+    titleKey: 'categoryOneTitle',
+    descriptionKey: 'categoryOneDescription',
+    listKey: 'categoryOneList',
+  },
+  {
     icon: Code2,
-    titleKey: 'courseOneTitle',
-    descriptionKey: 'courseOneDescription',
-    levelKey: 'courseOneLevel',
-    durationKey: 'courseOneDuration',
-  },
-  {
-    icon: Globe,
-    titleKey: 'courseTwoTitle',
-    descriptionKey: 'courseTwoDescription',
-    levelKey: 'courseTwoLevel',
-    durationKey: 'courseTwoDuration',
-  },
-  {
-    icon: Database,
-    titleKey: 'courseThreeTitle',
-    descriptionKey: 'courseThreeDescription',
-    levelKey: 'courseThreeLevel',
-    durationKey: 'courseThreeDuration',
+    titleKey: 'categoryTwoTitle',
+    descriptionKey: 'categoryTwoDescription',
+    listKey: 'categoryTwoList',
   },
   {
     icon: Laptop,
-    titleKey: 'courseFourTitle',
-    descriptionKey: 'courseFourDescription',
-    levelKey: 'courseFourLevel',
-    durationKey: 'courseFourDuration',
+    titleKey: 'categoryThreeTitle',
+    descriptionKey: 'categoryThreeDescription',
+    listKey: 'categoryThreeList',
+  },
+  {
+    icon: Layers3,
+    titleKey: 'categoryFourTitle',
+    descriptionKey: 'categoryFourDescription',
+    listKey: 'categoryFourList',
+  },
+  {
+    icon: Smartphone,
+    titleKey: 'categoryFiveTitle',
+    descriptionKey: 'categoryFiveDescription',
+    listKey: 'categoryFiveList',
   },
 ];
 
@@ -43,80 +45,54 @@ export default async function CoursesSection() {
   const t = await getTranslations('Courses');
 
   return (
-    <section
-      id="courses"
-      className="bg-white py-20 sm:py-24"
-    >
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-
-        {/* Section Heading */}
-        <div className="mx-auto max-w-2xl text-center">
-          <span className="text-sm font-bold uppercase tracking-[0.2em] text-blue-700">
+    <section id="courses" className="bg-[#fff9e6] py-16 sm:py-20 lg:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-3xl text-center">
+          <p className="inline-flex rounded-full bg-[#ffedaa] px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-[#10234d]">
             {t('eyebrow')}
-          </span>
-
-          <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
-            {t('title')}{' '}
-            <span className="text-blue-700">
-              {t('highlight')}
-            </span>
-          </h2>
-
-          <p className="mt-5 text-base leading-7 text-slate-600">
-            {t('description')}
           </p>
+          <h2 className="mt-5 text-3xl font-black tracking-tight text-[#10234d] sm:text-4xl lg:text-5xl">
+            {t('title')} <span className="text-[#c47a00]">{t('highlight')}</span>
+          </h2>
+          <p className="mt-4 text-base leading-7 text-slate-600">{t('description')}</p>
         </div>
 
-        {/* Course Cards */}
-        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {courses.map((course, index) => {
-            const Icon = course.icon;
-
-            return (
-              <div
-                key={course.titleKey}
-                className="group rounded-2xl border border-slate-200 bg-white p-6 transition-all duration-300 hover:-translate-y-2 hover:border-blue-200 hover:shadow-xl"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-700 transition-colors group-hover:bg-blue-700 group-hover:text-white">
-                    <Icon size={24} />
-                  </div>
-
-                  <span className="text-sm font-semibold text-slate-300">
-                    0{index + 1}
-                  </span>
+        <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {courses.map(({ icon: Icon, titleKey, descriptionKey, listKey }, index) => (
+            <article
+              key={titleKey}
+              className="group flex flex-col rounded-2xl border border-[#e8dfc7] bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#edc247] hover:shadow-xl sm:p-6"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#10234d] text-[#ffc928]">
+                  <Icon aria-hidden="true" size={24} />
                 </div>
-
-                <h3 className="mt-7 text-xl font-bold text-slate-900">
-                  {t(course.titleKey)}
-                </h3>
-
-                <p className="mt-3 min-h-20 text-sm leading-6 text-slate-600">
-                  {t(course.descriptionKey)}
-                </p>
-
-                <div className="mt-6 space-y-2 border-t border-slate-100 pt-5">
-                  <p className="text-xs font-medium text-slate-500">
-                    {t('levelLabel')}: {t(course.levelKey)}
-                  </p>
-
-                  <p className="text-xs font-medium text-slate-500">
-                    {t('durationLabel')}: {t(course.durationKey)}
-                  </p>
-                </div>
-
-                <a
-                  href="#contact"
-                  className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-blue-700 transition-all group-hover:gap-3"
-                >
-                  {t('courseDetails')}
-                  <ArrowUpRight size={16} />
-                </a>
+                <span className="rounded-full bg-[#fff4c2] px-3 py-1 text-xs font-extrabold text-[#10234d]">
+                  {t('categoryLabel')} 0{index + 1}
+                </span>
               </div>
-            );
-          })}
+              <h3 className="mt-5 text-xl font-extrabold text-[#10234d]">{t(titleKey)}</h3>
+              <p className="mt-2 text-sm leading-6 text-slate-600">{t(descriptionKey)}</p>
+              <ul className="mt-5 flex flex-wrap gap-2">
+                {t(listKey).split('|').map((item) => (
+                  <li
+                    key={item}
+                    className="rounded-lg bg-[#f4f6fa] px-2.5 py-1.5 text-xs font-medium leading-4 text-slate-700"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <a
+                href="#admission"
+                className="mt-6 inline-flex min-h-11 items-center gap-2 self-start rounded-lg bg-[#ffc928] px-4 py-2 text-sm font-bold text-[#10234d] transition hover:bg-[#ffda5e]"
+              >
+                {t('courseDetails')}
+                <ArrowUpRight aria-hidden="true" size={16} />
+              </a>
+            </article>
+          ))}
         </div>
-
       </div>
     </section>
   );

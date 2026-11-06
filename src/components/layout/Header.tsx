@@ -1,110 +1,110 @@
-
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
-import { Menu, X } from 'lucide-react';
+import { Menu, Phone, X } from 'lucide-react';
 import LanguageSwitcher from './LanguageSwitcher';
 
 const navLinks = [
-  { label: 'Home', href: '/#home' },
-  { label: 'About Us', href: '/#about' },
-  { label: 'Courses', href: '/#courses' },
-  { label: 'IT Services', href: '/#services' },
-  { label: 'Contact', href: '/#contact' },
-  { label: 'Free Aptitude Test', href: '/aptitude' },
+  { key: 'home', href: '/#home' },
+  { key: 'school', href: '/#school-coaching' },
+  { key: 'courses', href: '/#courses' },
+  { key: 'services', href: '/#services' },
+  { key: 'about', href: '/#about' },
+  { key: 'contact', href: '/#contact' },
 ] as const;
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const t = useTranslations('Navigation');
 
   return (
-    <header className="sticky top-0 z-50 border-b border-gray-100 bg-white/95 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:py-4">
-
+    <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/95 backdrop-blur">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
         <Link
           href="/"
           onClick={() => setMenuOpen(false)}
-          className="flex min-w-0 items-center gap-2"
+          className="flex min-w-0 items-center gap-2.5"
         >
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-700 text-xl font-bold text-white">
-            M
-          </div>
-
-          <div className="min-w-0">
-            <h1 className="truncate text-sm font-bold text-gray-900 sm:text-base">
-              Maharashtra Edu & Tech
-            </h1>
-            <p className="hidden text-xs text-gray-500 sm:block">
-              Education • Technology • Innovation
-            </p>
-          </div>
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#10234d] text-[#ffc928]">
+            <span className="text-xl font-black">M</span>
+          </span>
+          <span className="min-w-0">
+            <span className="block truncate text-sm font-black leading-tight text-[#10234d] sm:text-base">
+              Maharashtra Edu &amp; Tech
+            </span>
+            <span className="hidden text-[11px] font-medium text-slate-500 sm:block">
+              {t('tagline')}
+            </span>
+          </span>
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden items-center gap-5 lg:flex">
-          {navLinks.map((link) => (
+        <nav aria-label={t('mainMenu')} className="hidden items-center gap-4 xl:flex">
+          {navLinks.map(({ key, href }) => (
             <Link
-              key={link.href}
-              href={link.href}
-              className={`text-sm font-medium transition hover:text-blue-700 ${
-                link.href === '/aptitude'
-                  ? 'font-semibold text-blue-700'
-                  : 'text-gray-700'
-              }`}
+              key={key}
+              href={href}
+              className="whitespace-nowrap text-xs font-bold text-slate-700 transition hover:text-[#a35f00] 2xl:text-sm"
             >
-              {link.label}
+              {t(key)}
             </Link>
           ))}
+          <Link
+            href="/aptitude"
+            className="whitespace-nowrap text-xs font-bold text-slate-700 transition hover:text-[#a35f00] 2xl:text-sm"
+          >
+            {t('aptitude')}
+          </Link>
         </nav>
 
         <div className="flex shrink-0 items-center gap-2">
           <LanguageSwitcher />
-
           <Link
-            href="/#contact"
-            className="hidden rounded-lg bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-800 sm:inline-block"
+            href="/#admission"
+            className="hidden min-h-10 items-center gap-2 rounded-lg bg-[#ffc928] px-3 py-2 text-xs font-extrabold text-[#10234d] transition hover:bg-[#ffda5e] md:inline-flex"
           >
-            Enquire Now
+            {t('admission')}
           </Link>
-
           <button
             type="button"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            onClick={() => setMenuOpen((open) => !open)}
+            aria-label={menuOpen ? t('closeMenu') : t('openMenu')}
             aria-expanded={menuOpen}
-            className="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-800 lg:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-[#10234d] xl:hidden"
           >
-            {menuOpen ? <X size={22} /> : <Menu size={22} />}
+            {menuOpen ? <X aria-hidden="true" size={21} /> : <Menu aria-hidden="true" size={21} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Navigation */}
       {menuOpen && (
-        <nav className="border-t border-gray-100 bg-white px-4 py-4 lg:hidden">
-          <div className="flex flex-col gap-1">
-            {navLinks.map((link) => (
+        <nav aria-label={t('mainMenu')} className="border-t border-slate-100 bg-white px-4 py-3 xl:hidden">
+          <div className="mx-auto flex max-w-7xl flex-col gap-1">
+            {navLinks.map(({ key, href }) => (
               <Link
-                key={link.href}
-                href={link.href}
+                key={key}
+                href={href}
                 onClick={() => setMenuOpen(false)}
-                className={`rounded-lg px-4 py-3 text-sm font-medium hover:bg-blue-50 hover:text-blue-700 ${
-                  link.href === '/aptitude'
-                    ? 'font-semibold text-blue-700'
-                    : 'text-gray-700'
-                }`}
+                className="rounded-lg px-3 py-3 text-sm font-semibold text-slate-700 hover:bg-[#fff8df] hover:text-[#10234d]"
               >
-                {link.label}
+                {t(key)}
               </Link>
             ))}
-
             <Link
-              href="/#contact"
+              href="/aptitude"
               onClick={() => setMenuOpen(false)}
-              className="mt-2 rounded-lg bg-blue-700 px-4 py-3 text-center text-sm font-semibold text-white hover:bg-blue-800 sm:hidden"
+              className="rounded-lg px-3 py-3 text-sm font-semibold text-slate-700 hover:bg-[#fff8df] hover:text-[#10234d]"
             >
-              Enquire Now
+              {t('aptitude')}
+            </Link>
+            <Link
+              href="/#admission"
+              onClick={() => setMenuOpen(false)}
+              className="mt-2 inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-[#ffc928] px-4 py-3 text-sm font-extrabold text-[#10234d] md:hidden"
+            >
+              <Phone aria-hidden="true" size={17} />
+              {t('admission')}
             </Link>
           </div>
         </nav>

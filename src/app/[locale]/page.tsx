@@ -5,7 +5,8 @@ import WhyChooseUs from '@/components/home/WhyChooseUs';
 import CoursesSection from '@/components/home/CoursesSection';
 import ITServicesSection from '@/components/home/ITServicesSection';
 import ContactSection from '@/components/home/ContactSection';
-import Footer from '@/components/layout/Footer';
+import SchoolCoachingSection from '@/components/home/SchoolCoachingSection';
+import AdmissionSection from '@/components/home/AdmissionSection';
 
 import { setRequestLocale } from 'next-intl/server';
 
@@ -22,14 +23,14 @@ export default async function HomePage({ params }: Props) {
     <>
       <main>
         <HeroSection />
+        <SchoolCoachingSection />
+        <CoursesSection />
         <AboutSection />
         <WhyChooseUs />
-        <CoursesSection />
         <ITServicesSection />
+        <AdmissionSection />
         <ContactSection />
       </main>
-
-      <Footer />
     </>
   );
 }

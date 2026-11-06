@@ -5,7 +5,7 @@ import {
   MapPin,
   Phone,
   Clock,
-  Send,
+  MessageCircle,
 } from 'lucide-react';
 import ContactForm from './ContactForm';
 
@@ -36,18 +36,18 @@ export default async function ContactSection() {
   ];
 
   return (
-    <section id="contact" className="bg-slate-50 py-20 sm:py-24">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+    <section id="contact" className="bg-[#fff9e6] py-16 sm:py-20 lg:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
         {/* Heading */}
         <div className="mx-auto max-w-2xl text-center">
-          <span className="text-sm font-bold uppercase tracking-[0.2em] text-blue-700">
+          <span className="text-sm font-bold uppercase tracking-[0.2em] text-[#a35f00]">
             {t('eyebrow')}
           </span>
 
-          <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+          <h2 className="mt-4 text-3xl font-black tracking-tight text-[#10234d] sm:text-4xl">
             {t('title')}{' '}
-            <span className="text-blue-700">{t('highlight')}</span>
+            <span className="text-[#c47a00]">{t('highlight')}</span>
           </h2>
 
           <p className="mt-5 text-base leading-7 text-slate-600">
@@ -55,11 +55,11 @@ export default async function ContactSection() {
           </p>
         </div>
 
-        <div className="mt-14 grid gap-10 lg:grid-cols-5">
+        <div className="mt-10 grid grid-cols-1 gap-5 lg:grid-cols-5">
 
           {/* Contact Information */}
-          <div className="rounded-3xl bg-slate-950 p-8 text-white lg:col-span-2">
-            <h3 className="text-2xl font-bold">
+          <div className="rounded-2xl bg-[#10234d] p-6 text-white sm:p-8 lg:col-span-2">
+            <h3 className="text-2xl font-extrabold">
               {t('infoTitle')}
             </h3>
 
@@ -67,13 +67,13 @@ export default async function ContactSection() {
               {t('infoDescription')}
             </p>
 
-            <div className="mt-10 space-y-7">
+            <div className="mt-8 space-y-6">
               {contactItems.map((item) => {
                 const Icon = item.icon;
 
                 return (
                   <div key={item.title} className="flex gap-4">
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-500/15 text-blue-400">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/10 text-[#ffc928]">
                       <Icon size={21} />
                     </div>
 
@@ -88,6 +88,25 @@ export default async function ContactSection() {
                   </div>
                 );
               })}
+            </div>
+
+            <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+              <a
+                href="tel:+919773105112"
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[#ffc928] px-4 py-2.5 text-sm font-bold text-[#10234d] hover:bg-[#ffda5e]"
+              >
+                <Phone aria-hidden="true" size={17} />
+                {t('callNow')}
+              </a>
+              <a
+                href="https://wa.me/919773105112"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-white/25 px-4 py-2.5 text-sm font-bold text-white hover:bg-white/10"
+              >
+                <MessageCircle aria-hidden="true" size={17} />
+                {t('whatsapp')}
+              </a>
             </div>
           </div>
 
