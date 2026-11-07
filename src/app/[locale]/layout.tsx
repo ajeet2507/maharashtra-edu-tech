@@ -22,8 +22,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Maharashtra Education & Tech Classes',
-  description: 'Education, Computer Training and IT Solutions'
+  metadataBase: new URL('https://www.maharashtra-edu-tech.in')
 };
 
 export function generateStaticParams() {

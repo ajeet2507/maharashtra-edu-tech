@@ -499,7 +499,12 @@ export default function AptitudeResultDashboard({
           )}
           <p className="sr-only">
             {t('categoryTextSummary', {
-              categories: sectionMetrics.map((metric) => `${metric.label}: ${metric.score} of ${metric.maximum}, ${metric.percentage}%`).join('; '),
+              categories: sectionMetrics.map((metric) => t('categoryTextItem', {
+                category: metric.label,
+                score: metric.score,
+                maximum: metric.maximum,
+                percentage: metric.percentage,
+              })).join('; '),
             })}
           </p>
         </article>
@@ -652,7 +657,10 @@ export default function AptitudeResultDashboard({
               <section key={item.questionId} className="rounded-xl border border-slate-200 p-4 sm:p-5">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <span className="text-xs font-bold text-slate-500">
-                    {t('questionNumber', { number: item.questionOrder })} · {item.section}
+                    {t('questionNumber', { number: item.questionOrder })} · {(() => {
+                      const sectionKey = getSectionKey(item.section);
+                      return sectionKey ? t(sectionKey) : item.section;
+                    })()}
                   </span>
                   <span className={`rounded-full px-3 py-1 text-xs font-bold ${
                     item.selectedOption === null
